@@ -1,0 +1,47 @@
+# 环境变量文件（包含敏感信息）
+.env
+docker-compose.yaml
+
+# Go 构建产物
+export-service
+*.exe
+*.dll
+*.so
+*.dylib
+
+# 测试产物
+*.test
+*.out
+coverage.html
+coverage.out
+
+# Go 工作区文件
+go.work
+go.work.sum
+
+# 依赖目录
+vendor/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+
+# 前端构建产物（由构建生成）
+web/dist/
+web/node_modules/
+
+# 日志文件
+*.log
+
+.local/
+.remember/
+
+# 运行时数据目录（postgres 数据 + 导出文件）
+data/
