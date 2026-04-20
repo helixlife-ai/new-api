@@ -8,8 +8,9 @@ import (
 )
 
 type Config struct {
-	PostgresDSN string
-	Port        string
+	PostgresDSN   string
+	Port          string
+	ServiceAPIKey string
 }
 
 func Load() *Config {
@@ -18,8 +19,9 @@ func Load() *Config {
 	}
 
 	return &Config{
-		PostgresDSN: getEnv("POSTGRES_DSN", "host=localhost user=postgres password=postgres dbname=new-api port=5432 sslmode=disable"),
-		Port:        getEnv("PORT", "8080"),
+		PostgresDSN:   getEnv("POSTGRES_DSN", "host=localhost user=postgres password=postgres dbname=new-api port=5432 sslmode=disable"),
+		Port:          getEnv("PORT", "8080"),
+		ServiceAPIKey: getEnv("SERVICE_API_KEY", ""),
 	}
 }
 
