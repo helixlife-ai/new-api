@@ -1,0 +1,54 @@
+services:
+  app:
+    # build:
+    #   context: ./export-service
+    #   dockerfile: Dockerfile
+    image: openclaw-usage-logs-export-service:v1.0.0
+    container_name: export-service-app
+    restart: always
+    environment:
+      NEWAPI_TOOLS_URL: ${NEWAPI_TOOL_URL}
+      SERVICE_API_KEY: ${SERVICE_API_KEY}
+      # PostgreSQL 连接参数（与 export-postgres 服务保持一致）
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: export_service
+      POSTGRES_SSLMODE: disable
+      PORT: 8080
+      TZ: Asia/Shanghai
+      EXPORT_STORAGE_DIR: /app/exports
+    volumes:
+      - ./data/exports:/app/exports
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${PORT:-8080}:8080"
+    networks:
+      - export-network
+
+  db:
+    image: postgres:15
+    container_name: export-service-db
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: export_service
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    networks:
+      - export-network
+    ports:
+      - "5432:5432"
+    # healthcheck:
+    #   test: ["CMD-SHELL", "pg_isready -U postgres -d export_service"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5
+
+networks:
+  export-network:
+    driver: bridge
