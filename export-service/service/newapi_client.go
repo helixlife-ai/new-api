@@ -16,6 +16,7 @@ const streamPageSize = 100
 // NewAPIClient newapi-tools 客户端
 type NewAPIClient struct {
 	baseURL    string
+	apiKey     string
 	httpClient *http.Client
 }
 
@@ -45,9 +46,10 @@ type logsPageResponse struct {
 }
 
 // NewNewAPIClient 创建 newapi-tools 客户端
-func NewNewAPIClient(baseURL string) *NewAPIClient {
+func NewNewAPIClient(baseURL, apiKey string) *NewAPIClient {
 	return &NewAPIClient{
 		baseURL: baseURL,
+		apiKey:  apiKey,
 		httpClient: &http.Client{
 			Timeout: 30 * time.Second,
 		},
@@ -110,7 +112,7 @@ func (c *NewAPIClient) streamPages(ctx context.Context, tokenName string, startT
 
 // fetchPage 调用 newapi-tools GET /api/logs 取一页数据
 func (c *NewAPIClient) fetchPage(ctx context.Context, tokenName string, startTime, endTime int64, page, pageSize int) (*logsPageResponse, error) {
-	u, err := url.Parse(c.baseURL + "/api/logs")
+	u, err := url.Parse(c.baseURL + "/api/internal/logs")
 	if err != nil {
 		return nil, err
 	}
@@ -128,6 +130,9 @@ func (c *NewAPIClient) fetchPage(ctx context.Context, tokenName string, startTim
 	req, err := http.NewRequestWithContext(ctx, "GET", u.String(), nil)
 	if err != nil {
 		return nil, err
+	}
+	if c.apiKey != "" {
+		req.Header.Set("X-Service-Key", c.apiKey)
 	}
 
 	httpResp, err := c.httpClient.Do(req)

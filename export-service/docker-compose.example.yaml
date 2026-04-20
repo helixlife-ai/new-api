@@ -8,6 +8,7 @@ services:
     restart: always
     environment:
       NEWAPI_TOOLS_URL: ${NEWAPI_TOOL_URL}
+      SERVICE_API_KEY: ${SERVICE_API_KEY}
       # PostgreSQL 连接参数（与 export-postgres 服务保持一致）
       POSTGRES_HOST: ${POSTGRES_HOST}
       POSTGRES_PORT: ${POSTGRES_PORT}

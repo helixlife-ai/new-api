@@ -64,7 +64,7 @@ func TestNewAPIClient_StreamLogsByTokenName_SinglePage(t *testing.T) {
 	srv := buildMockServer(t, logs, 100)
 	defer srv.Close()
 
-	client := NewNewAPIClient(srv.URL)
+	client := NewNewAPIClient(srv.URL, "")
 
 	var collected []LogEntry
 	err := client.StreamLogsByTokenName(context.Background(), "tok", 1712000000, 1714000000, func(log *LogEntry) error {
@@ -90,7 +90,7 @@ func TestNewAPIClient_StreamLogsByTokenName_MultiPage(t *testing.T) {
 	srv := buildMockServer(t, logs, streamPageSize)
 	defer srv.Close()
 
-	client := NewNewAPIClient(srv.URL)
+	client := NewNewAPIClient(srv.URL, "")
 
 	var collected []LogEntry
 	err := client.StreamLogsByTokenName(context.Background(), "tok", 1712000000, 1714000000, func(log *LogEntry) error {
@@ -125,7 +125,7 @@ func TestNewAPIClient_StreamLogsByTokenNames_MultipleTokens(t *testing.T) {
 	srv := buildMockServer(t, logs, 100)
 	defer srv.Close()
 
-	client := NewNewAPIClient(srv.URL)
+	client := NewNewAPIClient(srv.URL, "")
 
 	var collected []LogEntry
 	// 每个 token 各调用一次，mock 返回全部数据（不按 token 过滤）
@@ -152,7 +152,7 @@ func TestNewAPIClient_StreamLogsByTokenName_CallbackError(t *testing.T) {
 	srv := buildMockServer(t, logs, 100)
 	defer srv.Close()
 
-	client := NewNewAPIClient(srv.URL)
+	client := NewNewAPIClient(srv.URL, "")
 
 	count := 0
 	err := client.StreamLogsByTokenName(context.Background(), "tok", 1712000000, 1714000000, func(log *LogEntry) error {
@@ -178,7 +178,7 @@ func TestNewAPIClient_StreamLogsByTokenName_ServerError(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	client := NewNewAPIClient(srv.URL)
+	client := NewNewAPIClient(srv.URL, "")
 	err := client.StreamLogsByTokenName(context.Background(), "tok", 1712000000, 1714000000, func(log *LogEntry) error {
 		return nil
 	})
@@ -197,7 +197,7 @@ func TestNewAPIClient_EstimateLogCount(t *testing.T) {
 	srv := buildMockServer(t, logs, 100)
 	defer srv.Close()
 
-	client := NewNewAPIClient(srv.URL)
+	client := NewNewAPIClient(srv.URL, "")
 	count, err := client.EstimateLogCount(context.Background(), []string{"tok"}, 1712000000, 1714000000)
 	if err != nil {
 		t.Fatalf("EstimateLogCount error: %v", err)

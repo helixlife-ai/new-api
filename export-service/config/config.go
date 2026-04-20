@@ -9,10 +9,11 @@ import (
 )
 
 type Config struct {
-	NewAPIToolsURL   string
-	PostgresDSN      string
-	Port             string
-	ExportStorageDir string // 导出文件存储目录
+	NewAPIToolsURL    string
+	NewAPIToolsAPIKey string
+	PostgresDSN       string
+	Port              string
+	ExportStorageDir  string // 导出文件存储目录
 }
 
 func Load() *Config {
@@ -22,10 +23,11 @@ func Load() *Config {
 	}
 
 	cfg := &Config{
-		NewAPIToolsURL:   getEnv("NEWAPI_TOOLS_URL", "http://localhost:8081"),
-		PostgresDSN:      buildPostgresDSN(),
-		Port:             getEnv("PORT", "8080"),
-		ExportStorageDir: getEnv("EXPORT_STORAGE_DIR", "./exports"),
+		NewAPIToolsURL:    getEnv("NEWAPI_TOOLS_URL", "http://localhost:8081"),
+		NewAPIToolsAPIKey: getEnv("SERVICE_API_KEY", ""),
+		PostgresDSN:       buildPostgresDSN(),
+		Port:              getEnv("PORT", "8080"),
+		ExportStorageDir:  getEnv("EXPORT_STORAGE_DIR", "./exports"),
 	}
 
 	// 确保导出存储目录存在

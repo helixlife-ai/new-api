@@ -27,7 +27,7 @@ type ExportController struct {
 func NewExportController(cfg *config.Config) *ExportController {
 	return &ExportController{
 		cfg:          cfg,
-		newAPIClient: service.NewNewAPIClient(cfg.NewAPIToolsURL),
+		newAPIClient: service.NewNewAPIClient(cfg.NewAPIToolsURL, cfg.NewAPIToolsAPIKey),
 	}
 }
 
